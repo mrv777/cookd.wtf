@@ -40,8 +40,11 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN mkdir -p public/images data && chown -R nextjs:nodejs public/images data
 
 # Install nansen-cli globally and Playwright chromium browser
+# Set PLAYWRIGHT_BROWSERS_PATH so both root (install) and nextjs (runtime) use the same path
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers
 RUN npm install -g nansen-cli@1.17.0 && \
-    npx playwright-core install --with-deps chromium
+    npx playwright-core install --with-deps chromium && \
+    chmod -R 755 /opt/pw-browsers
 
 USER nextjs
 
