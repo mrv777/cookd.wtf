@@ -1,7 +1,6 @@
-import { getCachedRoast } from "@/lib/cache/queries";
+import { getCachedRoastByAddress } from "@/lib/cache/queries";
 import { getArchetype } from "@/lib/roast/archetypes";
 import type { RoastResult } from "@/lib/roast/types";
-import { detectChain } from "@/lib/utils/address";
 import { SummaryCard } from "./summary-card";
 import { ArchetypeCard } from "./archetype-card";
 
@@ -13,9 +12,8 @@ interface Props {
 export default async function CardRenderPage({ params, searchParams }: Props) {
   const { address } = await params;
   const { variant = "summary" } = await searchParams;
-  const chain = detectChain(address) ?? "ethereum";
 
-  const cached = getCachedRoast(chain, address);
+  const cached = getCachedRoastByAddress(address);
   if (!cached) {
     return <FallbackCard address={address} />;
   }

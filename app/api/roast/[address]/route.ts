@@ -102,7 +102,7 @@ export async function GET(
       const roast = await generateRoast(roastInput);
       const roastJson = JSON.stringify(roast);
       setCachedRoast(chain, info.address, roastJson);
-      recordRoastCost();
+      recordRoastCost(20); // Phase 0 only = 20 credits
 
       return NextResponse.json({
         ...roast,
