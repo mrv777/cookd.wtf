@@ -21,7 +21,7 @@ const CARD_HEIGHT = 630;
 export async function renderCard(
   address: string,
   variant: "summary" | "archetype",
-  baseUrl: string
+  _baseUrl: string
 ): Promise<string> {
   const browser = await getBrowser();
   const page = await browser.newPage();
@@ -29,7 +29,10 @@ export async function renderCard(
   try {
     await page.setViewportSize({ width: CARD_WIDTH, height: CARD_HEIGHT });
 
-    const url = `${baseUrl}/card-render/${encodeURIComponent(address)}?variant=${variant}`;
+    // Always use internal HTTP URL — Playwright runs inside the container
+    // and can't access the external HTTPS URL through nginx
+    const internalBase = "http://localhost:3000";
+    const url = `${internalBase}/card-render/${encodeURIComponent(address)}?variant=${variant}`;
     await page.goto(url, { waitUntil: "networkidle", timeout: 15_000 });
 
     const buffer = await page.screenshot({
