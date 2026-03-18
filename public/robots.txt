@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /api/og/*
+Disallow: /api/roast/*
+Disallow: /card-render/*

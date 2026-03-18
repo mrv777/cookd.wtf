@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0C0C0C;
+  --color-bg-secondary: #141414;
+  --color-bg-card: #1C1C1C;
+  --color-text-primary: #E0E0E0;
+  --color-text-secondary: #777;
+  --color-text-dim: #444;
+  --color-border: #2A2A2A;
+  --color-accent-red: #FF4444;
+  --color-accent-orange: #FF8C00;
+  --color-accent-purple: #9B59B6;
+  --color-accent-blue: #00D4FF;
+  --color-accent-gold: #FFD700;
+  --color-accent-green: #00FF88;
+  --color-accent-gray: #8899AA;
+  --color-accent-pink: #FF69B4;
+  --color-accent-midnight: #7B68EE;
+  --color-accent-tomato: #FF6347;
+  --color-grade-fail: #FF4444;
+  --color-grade-poor: #FF8C00;
+  --color-grade-mid: #FFD700;
+  --color-grade-good: #00FF88;
+  --color-grade-great: #00D4FF;
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono), ui-monospace, "Cascadia Code", "JetBrains Mono", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Noise texture overlay — applied globally */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--color-border); }
+
+/* Selection */
+::selection {
+  background: #FF444440;
+  color: #fff;
+}
