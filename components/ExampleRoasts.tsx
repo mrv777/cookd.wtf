@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ARCHETYPES } from "@/lib/roast/archetypes";
-import type { RoastResult } from "@/lib/roast/types";
 
 const FALLBACK_EXAMPLES = [
   {
@@ -43,13 +42,9 @@ interface Props {
 }
 
 export function ExampleRoasts({ recentRoasts }: Props) {
-  const entries = recentRoasts && recentRoasts.length > 0
-    ? recentRoasts
-    : FALLBACK_EXAMPLES;
-
-  const label = recentRoasts && recentRoasts.length > 0
-    ? "Recent roasts"
-    : "Example roasts";
+  const hasRealRoasts = recentRoasts && recentRoasts.length > 0;
+  const entries = hasRealRoasts ? recentRoasts : FALLBACK_EXAMPLES;
+  const label = hasRealRoasts ? "Recent roasts" : "Example roasts";
 
   return (
     <div>
@@ -61,13 +56,8 @@ export function ExampleRoasts({ recentRoasts }: Props) {
           const arch = ARCHETYPES[entry.archetype];
           const accentColor = arch?.accentColor ?? "#8899AA";
 
-          return (
-            <Link
-              key={entry.address}
-              href={`/roast/${encodeURIComponent(entry.address)}`}
-              className="group flex items-start gap-4 border-b border-border py-4 transition-colors hover:bg-bg-secondary"
-            >
-              {/* Score */}
+          const content = (
+            <>
               <span
                 className="inline-flex h-7 w-10 shrink-0 items-center justify-center font-mono text-xs font-bold text-black"
                 style={{ background: accentColor }}
@@ -91,11 +81,32 @@ export function ExampleRoasts({ recentRoasts }: Props) {
                   &ldquo;{entry.verdict}&rdquo;
                 </p>
               </div>
+            </>
+          );
 
-              <span className="font-mono text-[11px] text-text-dim group-hover:text-text-secondary transition-colors">
-                →
-              </span>
-            </Link>
+          // Real cached roasts are clickable; fake examples are display-only
+          if (hasRealRoasts) {
+            return (
+              <Link
+                key={entry.address}
+                href={`/roast/${encodeURIComponent(entry.address)}`}
+                className="group flex items-start gap-4 border-b border-border py-4 transition-colors hover:bg-bg-secondary"
+              >
+                {content}
+                <span className="font-mono text-[11px] text-text-dim group-hover:text-text-secondary transition-colors">
+                  →
+                </span>
+              </Link>
+            );
+          }
+
+          return (
+            <div
+              key={entry.address}
+              className="flex items-start gap-4 border-b border-border py-4"
+            >
+              {content}
+            </div>
           );
         })}
       </div>
