@@ -24,7 +24,12 @@ export function getImageUrl(
   address: string,
   variant: "summary" | "archetype"
 ): string {
-  return `/images/${sanitizeAddress(address)}_${variant}.png`;
+  // Serve via the API route — Next.js standalone doesn't serve
+  // runtime-generated files from the public/ volume as static assets
+  if (variant === "summary") {
+    return `/api/og/${encodeURIComponent(address)}`;
+  }
+  return `/api/og/${encodeURIComponent(address)}?variant=${variant}`;
 }
 
 export function saveImage(

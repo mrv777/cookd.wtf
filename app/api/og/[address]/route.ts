@@ -4,15 +4,18 @@ import { getImagePath } from "@/lib/image/storage";
 import { parseAddressInput } from "@/lib/utils/address";
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ address: string }> }
 ) {
   const { address } = await params;
   const decoded = decodeURIComponent(address);
   const info = parseAddressInput(decoded);
+  const variant = request.nextUrl.searchParams.get("variant") === "archetype"
+    ? "archetype" as const
+    : "summary" as const;
 
-  // Try to serve pre-generated summary card
-  const filePath = getImagePath(info?.address ?? decoded, "summary");
+  // Try to serve pre-generated card
+  const filePath = getImagePath(info?.address ?? decoded, variant);
 
   if (fs.existsSync(filePath)) {
     const buffer = fs.readFileSync(filePath);
